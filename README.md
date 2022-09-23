@@ -3,7 +3,7 @@
 [![Release](https://github.com/GeoWerkstatt/create-jira-release/actions/workflows/release-new-action-version.yml/badge.svg)](https://github.com/GeoWerkstatt/create-jira-release/actions/workflows/release-new-action-version.yml)
 
 Creates a new Jira release for a specific Jira project and assigns all relevant* Jira issue numbers to it.  
-\* All Jira issue numbers (e.g. TEST-123) in commit messages since last Git tag.
+\* All Jira issue numbers (e.g. TEST-123) in commit messages between two specified Git tags.
 
 ## Prerequisites
 
@@ -23,7 +23,8 @@ steps:
   with:
     jira-project-key: 'TEST'
     jira-automation-webhook: ${{ secrets.JIRA_AUTOMATION_WEBHOOK }}
-    build-version: v${{ env.VERSION }}
+    previous-version: v22.4.6
+    release-version: v${{ env.VERSION }}
 ```
 
 ## Options
@@ -32,7 +33,8 @@ steps:
 | ------------------------- | ------------------------------------- | -------- |
 | `jira-project-key`        | Jira project identifier (e.g. _TEST_) | true     |
 | `jira-automation-webhook` | Jira automation webhook url           | true     |
-| `build-version`           | Version identifier                    | true     |
+| `previous-version`        | Previous version.                     | true     |
+| `release-version`         | Version identifier                    | true     |
 
 ## Secrets
 

@@ -16,10 +16,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Fetch entire Git history (including tags)
-      run: git fetch --prune --unshallow --tags
-      shell: bash
-
     - name: Collect issue numbers since last release/tag
       run: |
         export LC_ALL=en_US.utf8

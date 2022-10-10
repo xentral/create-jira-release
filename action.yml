@@ -23,7 +23,7 @@ runs:
         git log ${{inputs.previous-version}}...${{inputs.release-version}} | \
           grep -oP "${{ inputs.jira-project-key }}-\d{1,}" | sort | uniq | \
           sed 's/^\|$/"/g' | paste -sd , | awk '{print "RELATED_JIRA_ISSUES="$0}' >> $GITHUB_ENV
-      shell: bash
+      shell: bash --noprofile --norc {0} 
 
     - name: Create json and invoke webhook
       run: |

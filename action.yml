@@ -7,6 +7,9 @@ inputs:
   jira-automation-webhook:
     description: "Jira automation webhook url"
     required: true
+  jira-automation-webhook-token:
+      description: "Jira automation webhook token"
+      required: true
   previous-version:
     description: "Previous release version"
     required: true
@@ -27,7 +30,20 @@ runs:
 
     - name: Create json and invoke webhook
       run: |
-        $json = ConvertTo-Json @{issues = @(${{ env.RELATED_JIRA_ISSUES }}); data = @{version = "${{ inputs.release-version }}"; projectName = "${{ inputs.jira-project-key }}"}}
+        $json = ConvertTo-Json @{
+          issues = @(${{ env.RELATED_JIRA_ISSUES }})
+          data = @{
+            version = "${{ inputs.release-version }}"
+            projectName = "${{ inputs.jira-project-key }}"
+          }
+        }
+        $headers = @{
+          "X-Automation-Webhook-Token" = "${{ inputs.jira-automation-webhook-token }}"
+          "Content-Type" = "application/json"
+        }
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-        Invoke-RestMethod ${{ inputs.jira-automation-webhook }} -Method Post -Body $json -ContentType "application/json"
+        Invoke-RestMethod -Uri "${{ inputs.jira-automation-webhook }}" `
+                          -Method Post `
+                          -Headers $headers `
+                          -Body $json
       shell: pwsh

@@ -4,12 +4,6 @@ inputs:
   jira-project-key:
     description: "Jira project identifier"
     required: true
-  jira-automation-webhook:
-    description: "Jira automation webhook url"
-    required: true
-  jira-automation-webhook-token:
-      description: "Jira automation webhook token"
-      required: true
   previous-version:
     description: "Previous release version"
     required: true
@@ -38,11 +32,11 @@ runs:
           }
         }
         $headers = @{
-          "X-Automation-Webhook-Token" = "${{ inputs.jira-automation-webhook-token }}"
+          "X-Automation-Webhook-Token" = "${{ env.JIRA_API_TOKEN }}"
           "Content-Type" = "application/json"
         }
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-        Invoke-RestMethod -Uri "${{ inputs.jira-automation-webhook }}" `
+        Invoke-RestMethod -Uri "${{ env.JIRA_API_URL }}" `
                           -Method Post `
                           -Headers $headers `
                           -Body $json
